@@ -1,0 +1,6 @@
+To do list:
+    Add more columns:
+        - IMD Full Breakdown
+    
+    Allow the user to select type of house
+        Do this by getting average house price by type and also quantity. Than can calc like ((AvgPrice*Quantity)+(AvgPrice*Quantity))/Total QUantity

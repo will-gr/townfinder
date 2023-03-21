@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Heat Table Example</title>
+    <meta charset="utf-8">
+    <style>
+        /* CSS for the table */
+        table {
+            border-collapse: collapse;
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+
+        th,
+        td {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* CSS for the color scale */
+        .color-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-scale div {
+            width: 30px;
+            height: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="color-scale">
+        <div style="background-color: #eff3ff;"></div>
+        <div style="background-color: #bdd7e7;"></div>
+        <div style="background-color: #6baed6;"></div>
+        <div style="background-color: #3182bd;"></div>
+        <div style="background-color: #08519c;"></div>
+    </div>
+    <table id="heat-table"></table>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+        // Define the data for the table
+        const data = [
+            { row: 1, col: 1, value: 0.2 },
+            { row: 1, col: 2, value: 0.4 },
+            { row: 1, col: 3, value: 0.6 },
+            { row: 1, col: 4, value: 0.8 },
+            { row: 1, col: 5, value: 1.0 },
+            { row: 2, col: 1, value: 0.4 },
+            { row: 2, col: 2, value: 0.6 },
+            { row: 2, col: 3, value: 0.8 },
+            { row: 2, col: 4, value: 1.0 },
+            { row: 2, col: 5, value: 0.2 },
+            { row: 3, col: 1, value: 0.6 },
+            { row: 3, col: 2, value: 0.8 },
+            { row: 3, col: 3, value: 1.0 },
+            { row: 3, col: 4, value: 0.2 },
+            { row: 3, col: 5, value: 0.4 },
+            { row: 4, col: 1, value: 0.8 },
+            { row: 4, col: 2, value: 1.0 },
+            { row: 4, col: 3, value: 0.2 },
+            { row: 4, col: 4, value: 0.4 },
+            { row: 4, col: 5, value: 0.6 },
+            { row: 5, col: 1, value: 1.0 },
+            { row: 5, col: 2, value: 0.2 },
+            { row: 5, col: 3, value: 0.4 },
+            { row: 5, col: 4, value: 0.6 },
+            { row: 5, col: 5, value: 0.8 }
+        ];
+
+        // Create a color scale
+        const colorScale = d3.scaleSequential()
+            .domain([0, 1])
+            .interpolator(d3.interpolateBlues);
+
+        // Get the table element
+        const table = d3.select('#heat-table');
+
+        // Create the table cells
+        const cells = table.selectAll('td')
+            .data(data)
+            .join('td')
+            .style('background-color', d => colorScale(d.value))
+            .text(d => d.value.toFixed(2));
+
+        // Create the table rows and headers
+        const rows = table.selectAll('tr')
+            .data(d3.group(data, d => d.row))
+            .join('tr');
+
+        rows.append('th')
+            .text(d => `Row ${d[0]}`);
+
+        rows.selectAll('td')
+            .data(d => d[1])
+            .join('td')
+            .style('background-color', d => colorScale(d.value))
+            .text(d => d.value.toFixed(2));
+
+    </script>
